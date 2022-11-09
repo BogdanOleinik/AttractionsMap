@@ -9,23 +9,40 @@ import SwiftUI
 
 struct LocationPreviewView: View {
     
+    @EnvironmentObject private var viewModel: LocationsViewModel
     let location: Location
     
     var body: some View {
-        VStack(spacing: 16) {
-            imageSection
-            titleSection
+        HStack(alignment: .bottom, spacing: 0.0) {
+            VStack(alignment: .leading, spacing: 16) {
+                imageSection
+                titleSection
+            }
+            
+            VStack(spacing: 8.0) {
+                learnMore
+                nextButton
+            }
         }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.ultraThinMaterial)
+                .offset(y: 65)
+        )
+        .cornerRadius(10)
     }
 }
 
 struct LocationPreviewView_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
-            Color.blue.ignoresSafeArea()
+            Color.green.ignoresSafeArea()
             
             LocationPreviewView(location: LocationsDataService.locations.first!)
+                .padding()
         }
+        .environmentObject(LocationsViewModel())
     }
 }
 
@@ -55,5 +72,28 @@ extension LocationPreviewView {
             Text(location.cityName)
                 .font(.subheadline)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var learnMore: some View {
+        Button {
+            
+        } label: {
+            Text("Learn more")
+                .font(.headline)
+                .frame(width: 125, height: 35)
+        }
+        .buttonStyle(.borderedProminent)
+    }
+    
+    private var nextButton: some View {
+        Button {
+            viewModel.nextButtonPressed()
+        } label: {
+            Text("Next")
+                .font(.headline)
+                .frame(width: 125, height: 35)
+        }
+        .buttonStyle(.bordered)
     }
 }
